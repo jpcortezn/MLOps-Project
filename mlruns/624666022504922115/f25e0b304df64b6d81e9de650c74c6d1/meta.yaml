@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/dionrizovelarde/Documents/ITESO/Semestre_10/Integracio%CC%81n_de_servicios_de_aprendizaje_MLops/MLOps-Project/mlruns/624666022504922115/f25e0b304df64b6d81e9de650c74c6d1/artifacts
+end_time: 1746640022815
+entry_point_name: ''
+experiment_id: '624666022504922115'
+lifecycle_stage: active
+run_id: f25e0b304df64b6d81e9de650c74c6d1
+run_name: polite-seal-542
+run_uuid: f25e0b304df64b6d81e9de650c74c6d1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746640008122
+status: 4
+tags: []
+user_id: dionrizovelarde

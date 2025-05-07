@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/dionrizovelarde/Documents/ITESO/Semestre_10/Integracio%CC%81n_de_servicios_de_aprendizaje_MLops/MLOps-Project/mlruns/624666022504922115/83c5a7f98fe54a2b919c218d89e6c634/artifacts
+end_time: 1746640576191
+entry_point_name: ''
+experiment_id: '624666022504922115'
+lifecycle_stage: active
+run_id: 83c5a7f98fe54a2b919c218d89e6c634
+run_name: redolent-steed-340
+run_uuid: 83c5a7f98fe54a2b919c218d89e6c634
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746640154456
+status: 3
+tags: []
+user_id: dionrizovelarde

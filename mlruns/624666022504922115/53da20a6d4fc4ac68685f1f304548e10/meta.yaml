@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/dionrizovelarde/Documents/ITESO/Semestre_10/Integracio%CC%81n_de_servicios_de_aprendizaje_MLops/MLOps-Project/mlruns/624666022504922115/53da20a6d4fc4ac68685f1f304548e10/artifacts
+end_time: 1746638971880
+entry_point_name: ''
+experiment_id: '624666022504922115'
+lifecycle_stage: active
+run_id: 53da20a6d4fc4ac68685f1f304548e10
+run_name: adventurous-doe-446
+run_uuid: 53da20a6d4fc4ac68685f1f304548e10
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746638952356
+status: 4
+tags: []
+user_id: dionrizovelarde

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/dionrizovelarde/Documents/ITESO/Semestre_10/Integracio%CC%81n_de_servicios_de_aprendizaje_MLops/MLOps-Project/mlruns/624666022504922115/cf71d33205244867855c7bf7b64bc20f/artifacts
+end_time: 1746639566670
+entry_point_name: ''
+experiment_id: '624666022504922115'
+lifecycle_stage: active
+run_id: cf71d33205244867855c7bf7b64bc20f
+run_name: debonair-hen-138
+run_uuid: cf71d33205244867855c7bf7b64bc20f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1746639552363
+status: 4
+tags: []
+user_id: dionrizovelarde
