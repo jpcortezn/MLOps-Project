@@ -1,0 +1,23 @@
+stages:
+  prepare:
+    cmd: python -m src.data.make_dataset
+    deps:
+      - src/data/make_dataset.py
+    outs:
+      - data/processed/
+
+  train:
+    cmd: python -m src.models.train_model
+    deps:
+      - src/models/train_model.py
+      - src/models/model.py
+      - data/processed/
+    outs:
+      - models/best_model.pth
+      - models/final_model.pth
+    metrics:
+      - models/metrics.json:
+          cache: false
+    plots:
+      - models/figures/training_curves.png
+      - models/figures/confusion_matrix.png
