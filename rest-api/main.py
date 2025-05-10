@@ -4,8 +4,16 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import io
+import os
 import sys
-sys.path.append("../src/models")
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+models_path = os.path.join(current_dir, "src", "models")
+if not os.path.exists(models_path):  # fallback if running locally
+    models_path = os.path.abspath(os.path.join(current_dir, "..", "src", "models"))
+
+sys.path.append(models_path)
+
 from model import ResidualEmotionCNN
 
 app = FastAPI()

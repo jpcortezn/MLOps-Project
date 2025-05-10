@@ -2,11 +2,12 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY main.py .
-COPY ../models ./models
-COPY ../src ./src
+COPY rest-api/main.py .
+COPY rest-api/requirements.txt .
+COPY models ./models
+COPY src ./src
 
-RUN pip install --no-cache-dir fastapi uvicorn torch torchvision pillow
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
 
