@@ -1,0 +1,35 @@
+name: CI - Train Emotion Recognition Model
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run training script
+      run: |
+        python src/models/train_model.py
+
+    - name: Upload trained model as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: best_emotion_model
+        path: models/best_emotion_model.pth
