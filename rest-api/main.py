@@ -16,7 +16,9 @@ sys.path.append(models_path)
 
 from model import ResidualEmotionCNN
 
-app = FastAPI()
+model_path = os.path.join(current_dir, "models", "final_model.pth")
+if not os.path.exists(model_path):  # fallback para ejecución local
+    model_path = os.path.abspath(os.path.join(current_dir, "..", "models", "final_model.pth"))
 
 model = ResidualEmotionCNN()
 model.load_state_dict(torch.load("../models/final_model.pth", map_location=torch.device('cpu')))
@@ -38,6 +40,8 @@ EMOTION_CLASSES = {
     5: "Tristeza",
     6: "Sorpresa"
 }
+
+app = FastAPI()
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
