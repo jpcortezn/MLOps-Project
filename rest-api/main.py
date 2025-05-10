@@ -9,7 +9,7 @@ import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 models_path = os.path.join(current_dir, "src", "models")
-if not os.path.exists(models_path):  # fallback if running locally
+if not os.path.exists(models_path):
     models_path = os.path.abspath(os.path.join(current_dir, "..", "src", "models"))
 
 sys.path.append(models_path)
@@ -17,7 +17,7 @@ sys.path.append(models_path)
 from model import ResidualEmotionCNN
 
 model_path = os.path.join(current_dir, "models", "final_model.pth")
-if not os.path.exists(model_path):  # fallback para ejecución local
+if not os.path.exists(model_path):
     model_path = os.path.abspath(os.path.join(current_dir, "..", "models", "final_model.pth"))
 
 model = ResidualEmotionCNN()
