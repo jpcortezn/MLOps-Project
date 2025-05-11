@@ -4,3 +4,4 @@ torch
 torchvision
 pillow
 python-multipart
+prometheus-fastapi-instrumentator

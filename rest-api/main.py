@@ -43,6 +43,10 @@ EMOTION_CLASSES = {
 
 app = FastAPI()
 
+# === Prometheus metrics
+from prometheus_fastapi_instrumentator import Instrumentator
+Instrumentator().instrument(app).expose(app, "/metrics")
+
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     try:
