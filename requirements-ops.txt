@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+loguru
+prometheus_fastapi_instrumentator
