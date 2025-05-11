@@ -23,7 +23,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t emotion-api ./rest-api
+        docker build -t emotion-api . -f rest-api/Dockerfile
 
     - name: Prepare SSH key
       run: |
