@@ -2,8 +2,8 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY main.py .
-COPY requirements.txt .
+COPY rest-api/main.py .
+COPY rest-api/requirements.txt .
 COPY models ./models
 COPY src ./src
 
