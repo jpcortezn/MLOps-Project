@@ -1,0 +1,5 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://facial-recognition-data-636ac69b
+    region = us-east-2
