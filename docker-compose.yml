@@ -6,8 +6,9 @@ services:
       context: .
       dockerfile: rest-api/Dockerfile
     image: emotion-api
-    ports:
-      - "8000:8000"
+    # <-- BORRA ESTA SECCIÓN
+    # ports:
+    #   - "8000:8000"
     restart: unless-stopped
 
   nginx:
@@ -25,7 +26,7 @@ services:
     container_name: prometheus
     image: prom/prometheus:latest
     ports:
-      - "9091:9090"  # ← host:container
+      - "9091:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     restart: unless-stopped
@@ -36,4 +37,5 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+
 
