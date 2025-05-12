@@ -1,7 +1,8 @@
 fastapi
 uvicorn
-torch
-torchvision
+torch==2.2.1+cpu
+torchvision==0.17.1+cpu
 pillow
 python-multipart
 prometheus-fastapi-instrumentator
+-f https://download.pytorch.org/whl/torch_stable.html
