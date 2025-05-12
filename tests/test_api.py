@@ -1,5 +1,3 @@
-# tests/test_integration_api.py
-
 import io
 import os
 import logging
