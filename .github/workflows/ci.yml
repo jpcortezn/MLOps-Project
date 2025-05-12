@@ -40,10 +40,10 @@ jobs:
           echo "Limpiando contenedores y puertos antiguos..."
           cd emotion-api
 
-          # Forzar liberación de puertos comunes
-          sudo lsof -t -i:8000 -i:9090 -i:3000 | xargs --no-run-if-empty sudo kill -9 || true
+          # Liberar puertos si están ocupados por otros procesos
+          sudo lsof -t -i:8000 -i:9090 -i:3000 -i:80 | xargs --no-run-if-empty sudo kill -9 || true
 
-          # Detener y eliminar contenedores/redes anteriores
+          # Limpiar contenedores y redes previos
           docker-compose down || true
           docker container prune -f || true
           docker network prune -f || true
@@ -51,3 +51,4 @@ jobs:
           echo "Desplegando contenedores..."
           docker-compose up -d --build
         EOF
+
