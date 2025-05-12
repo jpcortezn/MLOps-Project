@@ -2,6 +2,6 @@
 
 MLOps project for emotion recognition from facial expressions.
 
-## Diagrama de la Infraestructura en AWS
+## AWS Infrastructure Diagram
 
-![Infraestructura AWS](./Cloud/Diagrama%20MLOPS.jpg)
+![Infraestructura AWS](./Cloud/Diagrama%20MLOPS.jpg)git 
