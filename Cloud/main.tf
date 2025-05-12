@@ -22,6 +22,25 @@ resource "aws_key_pair" "deployer" {
 }
 
 # ----------------------------
+# KMS Key for S3 Encryption
+# ----------------------------
+resource "aws_kms_key" "s3_encryption_key" {
+  description             = "KMS key for S3 bucket encryption"
+  deletion_window_in_days = 30
+  enable_key_rotation     = true
+  
+  tags = {
+    Name = "s3-encryption-key"
+    Purpose = "Data protection for facial recognition data"
+  }
+}
+
+resource "aws_kms_alias" "s3_key_alias" {
+  name          = "alias/s3-encryption-key"
+  target_key_id = aws_kms_key.s3_encryption_key.key_id
+}
+
+# ----------------------------
 # Red VPC y Subred Pública
 # ----------------------------
 resource "aws_vpc" "main" {
@@ -158,6 +177,75 @@ resource "random_id" "bucket_id" {
 resource "aws_s3_bucket" "data_storage" {
   bucket        = "facial-recognition-data-${random_id.bucket_id.hex}"
   force_destroy = true
+}
+
+# Server-side encryption configuration
+resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption" {
+  bucket = aws_s3_bucket.data_storage.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.s3_encryption_key.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+# Block public access to the bucket
+resource "aws_s3_bucket_public_access_block" "s3_access_block" {
+  bucket = aws_s3_bucket.data_storage.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# Add S3 bucket policy for encryption
+resource "aws_s3_bucket_policy" "s3_encryption_policy" {
+  bucket = aws_s3_bucket.data_storage.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "DenyIncorrectEncryptionHeader"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = "s3:PutObject"
+        Resource  = "${aws_s3_bucket.data_storage.arn}/*"
+        Condition = {
+          StringNotEquals = {
+            "s3:x-amz-server-side-encryption" = "aws:kms"
+          }
+        }
+      },
+      {
+        Sid       = "DenyUnencryptedObjectUploads"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = "s3:PutObject"
+        Resource  = "${aws_s3_bucket.data_storage.arn}/*"
+        Condition = {
+          Null = {
+            "s3:x-amz-server-side-encryption" = "true"
+          }
+        }
+      },
+      {
+        Sid       = "EnforceKMSKeyId"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = "s3:PutObject"
+        Resource  = "${aws_s3_bucket.data_storage.arn}/*"
+        Condition = {
+          StringNotEquals = {
+            "s3:x-amz-server-side-encryption-aws-kms-key-id" = aws_kms_key.s3_encryption_key.arn
+          }
+        }
+      }
+    ]
+  })
 }
 
 # ----------------------------
