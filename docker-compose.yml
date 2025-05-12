@@ -1,14 +1,17 @@
 version: "3.8"
 services:
   rest-api:
+    container_name: rest-api
     build:
       context: .
       dockerfile: rest-api/Dockerfile
     image: emotion-api
     ports:
       - "8000:8000"
+    restart: unless-stopped
 
   nginx:
+    container_name: nginx
     image: nginx:stable
     ports:
       - "80:80"
@@ -16,15 +19,21 @@ services:
       - rest-api
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
 
   prometheus:
+    container_name: prometheus
     image: prom/prometheus:latest
     ports:
-      - "9090:9090"
+      - "9091:9090"  # ← host:container
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
 
   grafana:
+    container_name: grafana
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
+    restart: unless-stopped
+
