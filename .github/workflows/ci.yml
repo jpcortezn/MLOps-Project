@@ -9,46 +9,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Build Docker image
-      run: |
-        docker build -t emotion-api . -f rest-api/Dockerfile
+      - name: Build Docker image
+        run: |
+          docker build -t emotion-api . -f rest-api/Dockerfile
 
-    - name: Prepare SSH key
-      run: |
-        echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
-        chmod 600 ec2_key.pem
+      - name: Prepare SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2_key.pem
+          chmod 600 ec2_key.pem
 
-    - name: Copy files to EC2
-      run: |
-        rsync -avz -e "ssh -i ec2_key.pem -o StrictHostKeyChecking=no" ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/emotion-api
+      - name: Copy files to EC2
+        run: |
+          rsync -avz -e "ssh -i ec2_key.pem -o StrictHostKeyChecking=no" \
+            ./ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/emotion-api
 
-    - name: Deploy on EC2 via SSH
-      run: |
-        ssh -i ec2_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          echo "Limpiando contenedores y puertos antiguos..."
-          cd emotion-api
+      - name: Deploy on EC2 via SSH
+        run: |
+          ssh -i ec2_key.pem -o StrictHostKeyChecking=no \
+              ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            echo "Limpiando puertos y contenedores antiguos..."
+            cd emotion-api
 
-          # Liberar puertos si están ocupados por otros procesos
-          sudo lsof -t -i:8000 -i:9090 -i:3000 -i:80 | xargs --no-run-if-empty sudo kill -9 || true
+            # Matar procesos que estén usando los puertos clave
+            sudo lsof -t -i:8000 -i:9090 -i:3000 -i:80 \
+              | xargs --no-run-if-empty sudo kill -9 || true
 
-          # Limpiar contenedores y redes previos
-          docker-compose down || true
-          docker container prune -f || true
-          docker network prune -f || true
+            # Bajar y limpiar cualquier contenedor/red huérfanos
+            docker-compose down --remove-orphans || true
+            docker container prune -f || true
+            docker network prune -f || true
 
-          echo "Desplegando contenedores..."
-          docker-compose up -d --build
-        EOF
+            echo "Levantando contenedores actualizados..."
+            docker-compose up -d --build
+          EOF
+
 
