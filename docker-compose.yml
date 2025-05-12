@@ -6,16 +6,13 @@ services:
       context: .
       dockerfile: rest-api/Dockerfile
     image: emotion-api
-    # <-- BORRA ESTA SECCIÓN
-    # ports:
-    #   - "8000:8000"
     restart: unless-stopped
 
   nginx:
     container_name: nginx
     image: nginx:stable
     ports:
-      - "80:80"
+      - "8080:80"           # ahora NGINX escucha en el host por el 8080
     depends_on:
       - rest-api
     volumes:
@@ -26,7 +23,7 @@ services:
     container_name: prometheus
     image: prom/prometheus:latest
     ports:
-      - "9091:9090"
+      - "9091:9090"         # si el 9090 te chocaba, ya lo cambiaste
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     restart: unless-stopped
@@ -35,7 +32,7 @@ services:
     container_name: grafana
     image: grafana/grafana:latest
     ports:
-      - "3001:3000"
+      - "3001:3000"         # Grafana en host Puerto 3001
     restart: unless-stopped
 
 
