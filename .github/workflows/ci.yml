@@ -37,7 +37,17 @@ jobs:
     - name: Deploy on EC2 via SSH
       run: |
         ssh -i ec2_key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          echo "Limpiando contenedores y puertos antiguos..."
           cd emotion-api
-          docker-compose down
+
+          # Forzar liberación de puertos comunes
+          sudo lsof -t -i:8000 -i:9090 -i:3000 | xargs --no-run-if-empty sudo kill -9 || true
+
+          # Detener y eliminar contenedores/redes anteriores
+          docker-compose down || true
+          docker container prune -f || true
+          docker network prune -f || true
+
+          echo "Desplegando contenedores..."
           docker-compose up -d --build
         EOF
